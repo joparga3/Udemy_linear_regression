@@ -1,0 +1,7 @@
+name: "Linear regression"
+navbar:
+  title: "Linear regression"
+  left:
+    - text: "Linear regression"
+      href: index.html
+

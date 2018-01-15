@@ -16,56 +16,28 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-
+<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-pre, code { background-color: #f8f8f8; }
-code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
-code > span.dt { color: #204a87; } /* DataType */
-code > span.dv { color: #0000cf; } /* DecVal */
-code > span.bn { color: #0000cf; } /* BaseN */
-code > span.fl { color: #0000cf; } /* Float */
-code > span.ch { color: #4e9a06; } /* Char */
-code > span.st { color: #4e9a06; } /* String */
-code > span.co { color: #8f5902; font-style: italic; } /* Comment */
-code > span.ot { color: #8f5902; } /* Other */
-code > span.al { color: #ef2929; } /* Alert */
-code > span.fu { color: #000000; } /* Function */
-code > span.er { color: #a40000; font-weight: bold; } /* Error */
-code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #000000; } /* Constant */
-code > span.sc { color: #000000; } /* SpecialChar */
-code > span.vs { color: #4e9a06; } /* VerbatimString */
-code > span.ss { color: #4e9a06; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #000000; } /* Variable */
-code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
-code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
-code > span.ex { } /* Extension */
-code > span.at { color: #c4a000; } /* Attribute */
-code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
-code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
-</style>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
   }
 </style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
 
 
 <style type="text/css">
@@ -126,34 +98,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 52px;
+  padding-top: 51px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 57px;
-  margin-top: -57px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 
 .section h2 {
-  padding-top: 57px;
-  margin-top: -57px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h3 {
-  padding-top: 57px;
-  margin-top: -57px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h4 {
-  padding-top: 57px;
-  margin-top: -57px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h5 {
-  padding-top: 57px;
-  margin-top: -57px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h6 {
-  padding-top: 57px;
-  margin-top: -57px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 </style>
 
@@ -269,7 +241,7 @@ body {
 text-align: justify}
 </style>
 <p><br></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(knitr)</code></pre></div>
+<pre class="r"><code>library(knitr)</code></pre>
 <p>In the previous section we learnt a bit of the preparatory steps needed before building predictive models. In this section we will learn about:</p>
 <ul>
 <li>Introduction to linear regression</li>
@@ -296,27 +268,27 @@ text-align: justify}
 <div id="creating-training-and-testing-samples" class="section level2">
 <h2><span class="header-section-number">1.3</span> Creating training and testing samples</h2>
 <p>We split the data into training and testing. The training data is the one we use to train the model, then we use the model created to use the test data to check our predictions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## LOADING THE DATA FROM THE PACKAGE
-<span class="co"># install.packages(&#39;car&#39;)</span>
-<span class="kw">require</span>(car)
-<span class="kw">data</span>(Prestige, <span class="dt">package =</span> <span class="st">&#39;car&#39;</span>)
-Prestige =<span class="st"> </span><span class="kw">na.omit</span>(Prestige)
+<pre class="r"><code>## LOADING THE DATA FROM THE PACKAGE
+# install.packages(&#39;car&#39;)
+require(car)
+data(Prestige, package = &#39;car&#39;)
+Prestige = na.omit(Prestige)
 
-<span class="co"># In order to separate training and testing set, the first thing we need to do is set a seed. This is done to make sure that the randomiser starts always at the same point.</span>
-<span class="kw">set.seed</span>(<span class="dv">100</span>)
+# In order to separate training and testing set, the first thing we need to do is set a seed. This is done to make sure that the randomiser starts always at the same point.
+set.seed(100)
 
-<span class="co"># There are multiple ways of separating a dataset. This uses the sample() function as a method. 70% to the train data and 30% to the test.</span>
-train_rows =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:<span class="kw">nrow</span>(Prestige), <span class="dt">size =</span> <span class="fl">0.7</span>*<span class="kw">nrow</span>(Prestige))
-training =<span class="st"> </span>Prestige[train_rows,]
-test =<span class="st"> </span>Prestige[-train_rows,]</code></pre></div>
+# There are multiple ways of separating a dataset. This uses the sample() function as a method. 70% to the train data and 30% to the test.
+train_rows = sample(1:nrow(Prestige), size = 0.7*nrow(Prestige))
+training = Prestige[train_rows,]
+test = Prestige[-train_rows,]</code></pre>
 </div>
 <div id="how-to-build-linear-regression-models-in-r" class="section level2">
 <h2><span class="header-section-number">1.4</span> How to build linear regression models in R</h2>
 <p>Let’s build a first linear model</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># For now we have selected a couple of random variables for the first model</span>
+<pre class="r"><code># For now we have selected a couple of random variables for the first model
 
-lmmod =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class="st"> </span>income +<span class="st"> </span>education, <span class="dt">data =</span> training)
-lmmod</code></pre></div>
+lmmod = lm(prestige ~ income + education, data = training)
+lmmod</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = prestige ~ income + education, data = training)
@@ -327,10 +299,10 @@ lmmod</code></pre></div>
 <p>This can be interpreted as</p>
 <p><img src="images/3.PNG" width="1137" /></p>
 <p>The model we have builts contains an incredible amount of information, you can check it by typing names(lmmod)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(lmmod)</code></pre></div>
+<pre class="r"><code>names(lmmod)</code></pre>
 <pre><code>##  [1] &quot;coefficients&quot;  &quot;residuals&quot;     &quot;effects&quot;       &quot;rank&quot;          &quot;fitted.values&quot; &quot;assign&quot;        &quot;qr&quot;            &quot;df.residual&quot;   &quot;xlevels&quot;       &quot;call&quot;          &quot;terms&quot;         &quot;model&quot;</code></pre>
 <p>The most easy way to check the model is by using summary(). We will learn how to interpret the summary() output in the next section.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(lmmod)</code></pre></div>
+<pre class="r"><code>summary(lmmod)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = prestige ~ income + education, data = training)
@@ -340,37 +312,38 @@ lmmod</code></pre></div>
 ## -16.8519  -4.6201  -0.5812   5.4547  15.3010 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -6.6485929  3.7971583  -1.751   0.0847 .  
-## income       0.0013115  0.0002916   4.498 2.90e-05 ***
-## education    4.1680732  0.4162643  10.013 8.46e-15 ***
+##               Estimate Std. Error t value            Pr(&gt;|t|)    
+## (Intercept) -6.6485929  3.7971583  -1.751              0.0847 .  
+## income       0.0013115  0.0002916   4.498 0.00002896860026620 ***
+## education    4.1680732  0.4162643  10.013 0.00000000000000846 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 7.502 on 65 degrees of freedom
 ## Multiple R-squared:  0.7993, Adjusted R-squared:  0.7931 
-## F-statistic: 129.4 on 2 and 65 DF,  p-value: &lt; 2.2e-16</code></pre>
+## F-statistic: 129.4 on 2 and 65 DF,  p-value: &lt; 0.00000000000000022</code></pre>
 </div>
 <div id="tyding-up-results-using-the-broom-package" class="section level2">
 <h2><span class="header-section-number">1.5</span> Tyding up results using the broom package</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&#39;broom&#39;)</span>
-<span class="kw">require</span>(broom)
-
-<span class="co"># Use the tidy() function from the broom package</span>
-lmmod_df =<span class="st"> </span><span class="kw">tidy</span>(lmmod)
-lmmod_df</code></pre></div>
-<pre><code>##          term     estimate    std.error statistic      p.value
-## 1 (Intercept) -6.648592860 3.7971582719 -1.750939 8.467428e-02
-## 2      income  0.001311547 0.0002915664  4.498280 2.896860e-05
-## 3   education  4.168073239 0.4162643020 10.013045 8.459886e-15</code></pre>
+<pre class="r"><code># install.packages(&#39;broom&#39;)
+require(broom)</code></pre>
+<pre><code>## Loading required package: broom</code></pre>
+<pre><code>## Warning: package &#39;broom&#39; was built under R version 3.4.2</code></pre>
+<pre class="r"><code># Use the tidy() function from the broom package
+lmmod_df = tidy(lmmod)
+lmmod_df</code></pre>
+<pre><code>##          term     estimate    std.error statistic                 p.value
+## 1 (Intercept) -6.648592860 3.7971582719 -1.750939 0.084674275154143413546
+## 2      income  0.001311547 0.0002915664  4.498280 0.000028968600266198165
+## 3   education  4.168073239 0.4162643020 10.013045 0.000000000000008459886</code></pre>
 </div>
 <div id="how-to-predict-on-new-data" class="section level2">
 <h2><span class="header-section-number">1.6</span> How to predict on new data</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># To predict use the predict() function</span>
-<span class="kw">require</span>(broom)
+<pre class="r"><code># To predict use the predict() function
+require(broom)
 
-predicted =<span class="st"> </span><span class="kw">predict</span>(lmmod, <span class="dt">newdata =</span> test)
-predicted</code></pre></div>
+predicted = predict(lmmod, newdata = test)
+predicted</code></pre>
 <pre><code>##        gov.administrators          general.managers               accountants       purchasing.officers                  chemists                biologists    vocational.counsellors       university.teachers   primary.school.teachers 
 ##                  64.19377                  78.39352                  58.73706                  52.57767                  65.30957                  67.07839                  69.37115                  76.28365                  57.52818 
 ## secondary.school.teachers  osteopaths.chiropractors             nursing.aides               pharmacists               bookkeepers        computer.operators             postal.clerks service.station.attendant                     cooks 
@@ -383,12 +356,13 @@ predicted</code></pre></div>
 <div id="evaluating-regression-models" class="section level2">
 <h2><span class="header-section-number">1.7</span> Evaluating regression models</h2>
 <p>Let’s compute the accuracy by computing the mean square error (MSE) and the mean absolute percentage error (MAPE). The lower the error the better.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># MSE</span>
-<span class="kw">mean</span>((test$prestige -<span class="st"> </span>predicted)^<span class="dv">2</span>)</code></pre></div>
+<pre class="r"><code># MSE
+mean((test$prestige - predicted)^2)</code></pre>
 <pre><code>## [1] 54.15005</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># MAPE</span>
-<span class="kw">mean</span>(<span class="kw">abs</span>(test$prestige -<span class="st"> </span>predicted)/test$prestige)</code></pre></div>
+<pre class="r"><code># MAPE
+mean(abs(test$prestige - predicted)/test$prestige)</code></pre>
 <pre><code>## [1] 0.1571824</code></pre>
+<p><br></p>
 </div>
 </div>
 <div id="interpreting-results-and-interaction-analysis" class="section level1">
@@ -401,7 +375,7 @@ predicted</code></pre></div>
 <div id="interpret-results" class="section level2">
 <h2><span class="header-section-number">2.1</span> Interpret results</h2>
 <p>Let’s re-run the summary of the linear model and start de-coding everthing it shows.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(lmmod)</code></pre></div>
+<pre class="r"><code>summary(lmmod)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = prestige ~ income + education, data = training)
@@ -411,16 +385,16 @@ predicted</code></pre></div>
 ## -16.8519  -4.6201  -0.5812   5.4547  15.3010 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -6.6485929  3.7971583  -1.751   0.0847 .  
-## income       0.0013115  0.0002916   4.498 2.90e-05 ***
-## education    4.1680732  0.4162643  10.013 8.46e-15 ***
+##               Estimate Std. Error t value            Pr(&gt;|t|)    
+## (Intercept) -6.6485929  3.7971583  -1.751              0.0847 .  
+## income       0.0013115  0.0002916   4.498 0.00002896860026620 ***
+## education    4.1680732  0.4162643  10.013 0.00000000000000846 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 7.502 on 65 degrees of freedom
 ## Multiple R-squared:  0.7993, Adjusted R-squared:  0.7931 
-## F-statistic: 129.4 on 2 and 65 DF,  p-value: &lt; 2.2e-16</code></pre>
+## F-statistic: 129.4 on 2 and 65 DF,  p-value: &lt; 0.00000000000000022</code></pre>
 <p>Starting with the coefficients section:</p>
 <ul>
 <li>The <span class="math inline">\(\beta\)</span> values are found in the <strong>Estimate</strong> column.</li>
@@ -438,23 +412,23 @@ predicted</code></pre></div>
 <li>The better way of comparing models is using the <strong>Adjusted R-squared</strong>, because it penalises it penalises the increase in number of predictors.</li>
 <li>A couple of other metrics that are not present in the summary are the <strong>AIC()</strong> (Akaike information criterion) and the <strong>BIC()</strong> (Bayesian information criterion) metric. They are basically penalized-likelihood criteria. The lower the AIC and BIC, the better your model. You can check this in R by using the <strong>AIC()</strong> and <strong>BIC()</strong> function.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">AIC</span>(lmmod)</code></pre></div>
+<pre class="r"><code>AIC(lmmod)</code></pre>
 <pre><code>## [1] 471.9643</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">BIC</span>(lmmod)</code></pre></div>
+<pre class="r"><code>BIC(lmmod)</code></pre>
 <pre><code>## [1] 480.8424</code></pre>
 <p>If we have introduced the idea that having simpler models is better by saying that a way to compare different models should be done by checking the adjusted r-squared and not the multiple r-squared, that means there variables that, when added, don’t add a huge amount of explanation of the Y behaviour. One of the possible reasons for this is multi-collinearity. As an example, you might a model with only 1 input variable, being that variable significant. However, by adding another input variable, the initial one that was significant, has become insignificant. How is that possible? Basically, that means that both variables kind of explain the same things, and there is no need of having both in the model. This can be checked using the <strong>VIF</strong> (variance inflation factor).</p>
 <p><img src="images/7.PNG" width="1040" /></p>
 <p>If a variable has high VIF, that means that the information provided by that variable can be explained by other variables in the model. As said above, the presence of a variable with high inflation can be redundant. Typically, a variable with VIF &gt; 4, is said to have multi-collinearity.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car::<span class="kw">vif</span>(lmmod)</code></pre></div>
+<pre class="r"><code>car::vif(lmmod)</code></pre>
 <pre><code>##    income education 
 ##  1.500155  1.500155</code></pre>
 </div>
 <div id="interaction-terms" class="section level2">
 <h2><span class="header-section-number">2.2</span> Interaction terms</h2>
 <p>Interaction terms are added when we think a look at 2 variables together rather than on its own might be useful. For example, in a medical insurance world, age and being a smoker will be useful to predict risk, but the combination of both might be even more predicted. In other words, maybe young smokers might be less risky than old smokers. Returning to the dataset we are working with, we might want to investigate the interaction between education and income. If you check the summary results, we can see that the interaction is significant and has improved the adjusted r-squared by 2%.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The &#39;:&#39; represents product between income and education</span>
-lmmod_1 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class="st"> </span>income +<span class="st"> </span>education +<span class="st"> </span>income:education, <span class="dt">data =</span> training)
-<span class="kw">summary</span>(lmmod_1)</code></pre></div>
+<pre class="r"><code># The &#39;:&#39; represents product between income and education
+lmmod_1 = lm(prestige ~ income + education + income:education, data = training)
+summary(lmmod_1)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = prestige ~ income + education + income:education, 
@@ -465,24 +439,24 @@ lmmod_1 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span cla
 ## -16.6526  -4.9203  -0.5159   4.3688  14.8160 
 ## 
 ## Coefficients:
-##                    Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)      -2.504e+01  8.496e+00  -2.947  0.00447 ** 
-## income            4.533e-03  1.372e-03   3.305  0.00156 ** 
-## education         5.497e+00  6.843e-01   8.034 2.81e-11 ***
-## income:education -2.253e-04  9.390e-05  -2.399  0.01934 *  
+##                     Estimate  Std. Error t value        Pr(&gt;|t|)    
+## (Intercept)      -25.0398990   8.4959909  -2.947         0.00447 ** 
+## income             0.0045329   0.0013717   3.305         0.00156 ** 
+## education          5.4970162   0.6842508   8.034 0.0000000000281 ***
+## income:education  -0.0002253   0.0000939  -2.399         0.01934 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 7.241 on 64 degrees of freedom
 ## Multiple R-squared:  0.8158, Adjusted R-squared:  0.8072 
-## F-statistic:  94.5 on 3 and 64 DF,  p-value: &lt; 2.2e-16</code></pre>
+## F-statistic:  94.5 on 3 and 64 DF,  p-value: &lt; 0.00000000000000022</code></pre>
 </div>
 <div id="non-linear-terms" class="section level2">
 <h2><span class="header-section-number">2.3</span> Non-linear terms</h2>
 <p>We could also specify non-linear terms by making use of the <em>I()</em> function in R. Let’s say for example that we think there is a relationship of education to the power of 2 that can explain prestige better.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># By adding -1 we can force the model to eliminate the intercept to the created model.</span>
-lmmod_1_1 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class="st"> </span>income +<span class="st"> </span><span class="kw">I</span>(education^<span class="dv">2</span>) -<span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> training)
-<span class="kw">summary</span>(lmmod_1_1)</code></pre></div>
+<pre class="r"><code># By adding -1 we can force the model to eliminate the intercept to the created model.
+lmmod_1_1 = lm(prestige ~ income + I(education^2) - 1, data = training)
+summary(lmmod_1_1)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = prestige ~ income + I(education^2) - 1, data = training)
@@ -492,22 +466,22 @@ lmmod_1_1 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span c
 ## -25.929  -2.501   4.125  10.775  16.988 
 ## 
 ## Coefficients:
-##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## income         0.0017432  0.0003884   4.488 2.95e-05 ***
-## I(education^2) 0.2646857  0.0223054  11.866  &lt; 2e-16 ***
+##                 Estimate Std. Error t value             Pr(&gt;|t|)    
+## income         0.0017432  0.0003884   4.488            0.0000295 ***
+## I(education^2) 0.2646857  0.0223054  11.866 &lt; 0.0000000000000002 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 10.03 on 66 degrees of freedom
 ## Multiple R-squared:  0.9604, Adjusted R-squared:  0.9592 
-## F-statistic: 800.4 on 2 and 66 DF,  p-value: &lt; 2.2e-16</code></pre>
+## F-statistic: 800.4 on 2 and 66 DF,  p-value: &lt; 0.00000000000000022</code></pre>
 </div>
 <div id="factor-terms" class="section level2">
 <h2><span class="header-section-number">2.4</span> Factor terms</h2>
 <p>Finally, we can also include non-continuous variables, in other words, categorical variables to the model. Luckily for use, we don’t need to tell the linear model that we are adding a categorical variable. We can simply add it, and it with create dummy variables (i.e., flafs for each category representing an ifelse scenario).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Categorical variables will show all except 1 of the categories.</span>
-lmmod_1_2 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class="st"> </span>income +<span class="st"> </span>education +<span class="st"> </span>type, <span class="dt">data =</span> training)
-<span class="kw">summary</span>(lmmod_1_2)</code></pre></div>
+<pre class="r"><code># Categorical variables will show all except 1 of the categories.
+lmmod_1_2 = lm(prestige ~ income + education + type, data = training)
+summary(lmmod_1_2)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = prestige ~ income + education + type, data = training)
@@ -517,18 +491,18 @@ lmmod_1_2 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span c
 ## -12.9067  -5.0913   0.6073   4.6693  18.9229 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -0.8802776  6.1734227  -0.143  0.88707    
-## income       0.0009797  0.0002989   3.278  0.00171 ** 
-## education    3.8351980  0.8137227   4.713 1.39e-05 ***
-## typeprof     5.0908556  4.6935336   1.085  0.28221    
-## typewc      -4.6698763  3.0839176  -1.514  0.13496    
+##               Estimate Std. Error t value  Pr(&gt;|t|)    
+## (Intercept) -0.8802776  6.1734227  -0.143   0.88707    
+## income       0.0009797  0.0002989   3.278   0.00171 ** 
+## education    3.8351980  0.8137227   4.713 0.0000139 ***
+## typeprof     5.0908556  4.6935336   1.085   0.28221    
+## typewc      -4.6698763  3.0839176  -1.514   0.13496    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 6.879 on 63 degrees of freedom
 ## Multiple R-squared:  0.8364, Adjusted R-squared:  0.826 
-## F-statistic: 80.51 on 4 and 63 DF,  p-value: &lt; 2.2e-16</code></pre>
+## F-statistic: 80.51 on 4 and 63 DF,  p-value: &lt; 0.00000000000000022</code></pre>
 </div>
 <div id="fitted-values-and-residuals" class="section level2">
 <h2><span class="header-section-number">2.5</span> Fitted values and residuals</h2>
@@ -538,10 +512,10 @@ lmmod_1_2 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span c
 <li>the fitted.values category within the linear model</li>
 <li>the <strong>predict()</strong> function, which will use the model just created and apply it to the data you want it to be applied to.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## ONLY RUNNING ONE OF THE METHODS (in this case my preferred due to intuition)
-<span class="co"># fitted(lmmod)</span>
-<span class="co"># lmmod$fitted.values</span>
-<span class="kw">predict</span>(lmmod, <span class="dt">newdata=</span>training)</code></pre></div>
+<pre class="r"><code>## ONLY RUNNING ONE OF THE METHODS (in this case my preferred due to intuition)
+# fitted(lmmod)
+# lmmod$fitted.values
+predict(lmmod, newdata=training)</code></pre>
 <pre><code>##    medical.technicians          veterinarians   real.estate.salesmen             physicists             collectors            bus.drivers                welders            secretaries  commercial.travellers         social.workers 
 ##               53.45488               78.88400               48.74568               73.00644               46.25187               32.24023               34.85744               46.95278               51.25745               60.88969 
 ##                 buyers       aircraft.workers            typesetters construction.labourers   rotary.well.drillers           firefighters                lawyers       physio.therapsts         auto.repairmen                 masons 
@@ -557,7 +531,7 @@ lmmod_1_2 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span c
 ##             librarians            file.clerks                typists       tellers.cashiers          office.clerks               janitors          psychologists             economists 
 ##               60.34582               47.69904               45.37132               40.91037               44.54477               27.54010               62.91695               64.09503</code></pre>
 <p>Residuals are the difference between the real values of the dataset and what your model predicts. You can check it here:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lmmod$residuals</code></pre></div>
+<pre class="r"><code>lmmod$residuals</code></pre>
 <pre><code>##    medical.technicians          veterinarians   real.estate.salesmen             physicists             collectors            bus.drivers                welders            secretaries  commercial.travellers         social.workers 
 ##            14.04512130           -12.18399966            -1.64567784             4.59356107           -16.85187300             3.65977182             6.94256117            -0.95278074           -11.05744728            -5.78969134 
 ##                 buyers       aircraft.workers            typesetters construction.labourers   rotary.well.drillers           firefighters                lawyers       physio.therapsts         auto.repairmen                 masons 
@@ -572,6 +546,7 @@ lmmod_1_2 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span c
 ##            -2.67824445            -0.02918486            -1.07929701             5.35886261            -5.06524753           -12.14269680            -6.84420357           -13.50145859             8.61413367             4.30669619 
 ##             librarians            file.clerks                typists       tellers.cashiers          office.clerks               janitors          psychologists             economists 
 ##            -2.24582036           -14.99903915            -3.47131945             1.38962589            -8.94476787           -10.24009997            11.98305365            -1.89502865</code></pre>
+<p><br></p>
 </div>
 </div>
 <div id="residual-analysis" class="section level1">
@@ -583,15 +558,17 @@ lmmod_1_2 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span c
 </ul>
 <div id="residual-analysis-plots" class="section level2">
 <h2><span class="header-section-number">3.1</span> Residual analysis plots</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
-<span class="kw">plot</span>(lmmod)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-67-1.png" /><!-- --></p>
+<pre class="r"><code>par(mfrow=c(2,2))
+plot(lmmod)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-24-1.png" /><!-- --></p>
 <ul>
 <li><strong>Residuals-vs-fitted.</strong> Remember residuals are the errors and fitted values are the predicted values of the dataset. You can see a dotted line at y = 0, which is what we would like to ideally have the scatter plot points. What we would like is a random cloud of points which would lead to a mean (represented by the red line) falling on top of y = 0 (the dotted line). We don’t want the red line to increase or decrease due to the values of the fitted values. If it does we are talking about heteroscasdicity and don’t want it to happen or need to address it if we are to obtain good results with the test data. To check this, instead of relying on a visual look at the graph (is the red line massively above dotted line?), we can use a statistical test for it. As always with a statistical test, we have a null and alternative hypothesis. The null hypothesis will be that there is heteroscasdicity and the alternative that there isn’t. The test we will perform is the <em>studentized Breusch-Pagan</em> using the <strong>bptest()</strong> function from the <strong>lmtest</strong> package. In this case, the results show that the p-value is greater than the significance level of 0.05, we can’t reject the null hypothesis that the error is constant and there we can’t say there is heteroscasdicity.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&#39;lmtest&#39;)</span>
-<span class="kw">require</span>(lmtest)
-lmtest::<span class="kw">bptest</span>(lmmod)</code></pre></div>
+<pre class="r"><code># install.packages(&#39;lmtest&#39;)
+require(lmtest)</code></pre>
+<pre><code>## Loading required package: lmtest</code></pre>
+<pre><code>## Warning: package &#39;lmtest&#39; was built under R version 3.4.3</code></pre>
+<pre class="r"><code>lmtest::bptest(lmmod)</code></pre>
 <pre><code>## 
 ##  studentized Breusch-Pagan test
 ## 
@@ -605,36 +582,36 @@ lmtest::<span class="kw">bptest</span>(lmmod)</code></pre></div>
 <div id="cooks-distance." class="section level2">
 <h2><span class="header-section-number">3.2</span> Cook’s distance.</h2>
 <p>Cook’s distance shows how much the fitted values would change if an observation was removed. Generally, points that are 4 times bigger than the mean are considered influential. Checking this with diagnostic plots:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cooks.distance</span>(lmmod)</code></pre></div>
+<pre class="r"><code>cooks.distance(lmmod)</code></pre>
 <pre><code>##    medical.technicians          veterinarians   real.estate.salesmen             physicists             collectors            bus.drivers                welders            secretaries  commercial.travellers         social.workers 
-##           5.121758e-02           9.421145e-02           2.485035e-04           9.246853e-03           4.299623e-02           3.211999e-03           1.124919e-02           1.999259e-04           1.440219e-02           1.267686e-02 
+##       0.05121758497251       0.09421145378210       0.00024850345753       0.00924685324075       0.04299623116984       0.00321199903940       0.01124919416023       0.00019992587101       0.01440218682112       0.01267686061983 
 ##                 buyers       aircraft.workers            typesetters construction.labourers   rotary.well.drillers           firefighters                lawyers       physio.therapsts         auto.repairmen                 masons 
-##           1.773369e-04           4.129072e-03           1.654098e-04           2.507217e-03           2.600600e-03           2.017280e-04           6.188123e-03           8.985199e-02           2.216141e-03           2.240579e-02 
+##       0.00017733689784       0.00412907221174       0.00016540976965       0.00250721708718       0.00260060048976       0.00020172796027       0.00618812252024       0.08985199107075       0.00221614114740       0.02240578859158 
 ##          mail.carriers     radio.tv.repairmen           receptionsts              policemen     commercial.artists    computer.programers     railway.sectionmen     elevator.operators        shipping.clerks              ministers 
-##           1.002761e-03           3.885480e-03           5.301462e-03           1.333838e-04           8.977667e-03           1.563711e-02           4.367387e-08           2.050457e-02           6.034056e-03           1.004034e-01 
+##       0.00100276107159       0.00388547982722       0.00530146169568       0.00013338381839       0.00897766744585       0.01563711083389       0.00000004367387       0.02050457282070       0.00603405586864       0.10040344358875 
 ##           electricians      textile.labourers             physicians         slaughterers.1        train.engineers                 pilots            draughtsmen        textile.weavers      funeral.directors             architects 
-##           3.962838e-03           2.377200e-03           1.960902e-01           1.012482e-02           2.274477e-02           5.179989e-03           5.005035e-03           1.254238e-02           5.320907e-03           1.820326e-03 
+##       0.00396283793691       0.00237719988034       0.19609020885535       0.01012482148499       0.02274476557960       0.00517998892517       0.00500503537261       0.01254237723866       0.00532090735127       0.00182032613642 
 ##                canners               plumbers    telephone.operators        claim.adjustors    radio.tv.announcers                 nurses           auto.workers             carpenters              surveyors         house.painters 
-##           3.620513e-03           6.875631e-03           2.142886e-03           3.002536e-03           2.752514e-04           4.697123e-02           7.295688e-06           2.994786e-02           1.527737e-02           7.840218e-04 
+##       0.00362051345123       0.00687563100277       0.00214288564598       0.00300253618780       0.00027525143675       0.04697122622812       0.00000729568786       0.02994785587699       0.01527737398843       0.00078402180011 
 ##      sales.supervisors       mining.engineers     electrical.linemen             machinists       insurance.agents           sales.clerks           taxi.drivers          travel.clerks                 bakers        civil.engineers 
-##           8.491501e-04           2.668811e-07           2.430982e-04           4.528659e-03           2.656521e-03           3.362028e-02           9.047807e-03           1.981638e-02           1.666161e-02           5.778753e-03 
+##       0.00084915006025       0.00000026688106       0.00024309823445       0.00452865900440       0.00265652135019       0.03362028189784       0.00904780715037       0.01981637923678       0.01666161473810       0.00577875292499 
 ##             librarians            file.clerks                typists       tellers.cashiers          office.clerks               janitors          psychologists             economists 
-##           1.943399e-03           8.232323e-02           3.416426e-03           5.303100e-04           1.410296e-02           2.801146e-02           4.795874e-02           1.135135e-03</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car::<span class="kw">influenceIndexPlot</span>(lmmod, <span class="dt">id.n =</span> <span class="dv">5</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-70-1.png" /><!-- --></p>
+##       0.00194339904952       0.08232323220865       0.00341642604335       0.00053031001714       0.01410296211552       0.02801145866791       0.04795874418746       0.00113513477365</code></pre>
+<pre class="r"><code>car::influenceIndexPlot(lmmod, id.n = 5)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" /><!-- --></p>
 </div>
 <div id="going-back-to-the-residua-vs-fitted-plot" class="section level2">
 <h2><span class="header-section-number">3.3</span> Going back to the Residua vs Fitted plot</h2>
 <p>Given that this is one of the plots I really like to check, it is worth mentioning that the plot you see above is a plot showing is the general information about the model. If you want to see the contribution of each variable you can use the <strong>residualPlots()</strong> function from the <strong>cars</strong> package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car::<span class="kw">residualPlots</span>(lmmod)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-71-1.png" /><!-- --></p>
+<pre class="r"><code>car::residualPlots(lmmod)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" /><!-- --></p>
 <pre><code>##            Test stat Pr(&gt;|t|)
 ## income        -1.939    0.057
 ## education      0.743    0.460
 ## Tukey test    -1.130    0.258</code></pre>
 <p>If you check the results, we clearly see a significant curvature in <em>income</em> compared to <em>education</em>. This is the typical example where we would seek to transform the variable. The new model shows that the transformation of the income variable is not flat for the Residuals vs Fitted and the adjusted-rsquared has improved 3%.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lmmod_2 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class="st"> </span><span class="kw">log</span>(income) +<span class="st"> </span>education, <span class="dt">data =</span> training)
-<span class="kw">summary</span>(lmmod_2)</code></pre></div>
+<pre class="r"><code>lmmod_2 = lm(prestige ~ log(income) + education, data = training)
+summary(lmmod_2)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = prestige ~ log(income) + education, data = training)
@@ -644,22 +621,23 @@ lmtest::<span class="kw">bptest</span>(lmmod)</code></pre></div>
 ## -16.7082  -4.6365  -0.2895   4.5747  15.1588 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -99.2524    17.1611  -5.784 2.27e-07 ***
-## log(income)  11.7078     2.1849   5.358 1.18e-06 ***
-## education     4.1309     0.3855  10.715 5.31e-16 ***
+##             Estimate Std. Error t value             Pr(&gt;|t|)    
+## (Intercept) -99.2524    17.1611  -5.784 0.000000227309148264 ***
+## log(income)  11.7078     2.1849   5.358 0.000001183974299580 ***
+## education     4.1309     0.3855  10.715 0.000000000000000531 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 7.154 on 65 degrees of freedom
 ## Multiple R-squared:  0.8174, Adjusted R-squared:  0.8118 
-## F-statistic: 145.5 on 2 and 65 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">car::<span class="kw">residualPlots</span>(lmmod_2)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-72-1.png" /><!-- --></p>
+## F-statistic: 145.5 on 2 and 65 DF,  p-value: &lt; 0.00000000000000022</code></pre>
+<pre class="r"><code>car::residualPlots(lmmod_2)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-29-1.png" /><!-- --></p>
 <pre><code>##             Test stat Pr(&gt;|t|)
 ## log(income)    -0.351    0.726
 ## education       1.256    0.214
 ## Tukey test      0.184    0.854</code></pre>
+<p><br></p>
 </div>
 </div>
 <div id="improving-models-using-best-subsets-stepwise-and-comparing-models-with-anova" class="section level1">
@@ -673,11 +651,12 @@ lmtest::<span class="kw">bptest</span>(lmmod)</code></pre></div>
 <div id="best-subsets-regression" class="section level2">
 <h2><span class="header-section-number">4.1</span> Best subsets regression</h2>
 <p>Best subsets technique chooses the best model for each size based on-predetermined metrics such as adjusted r-squared, BIC, etc. A way to perform best subsets is to use the <strong>regsubsets()</strong> function from the <strong>leaps</strong> package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&#39;leaps&#39;)</span>
-<span class="kw">require</span>(leaps)
-
-regsubsMod =<span class="st"> </span><span class="kw">regsubsets</span>(prestige ~<span class="st"> </span>education +<span class="st"> </span>income +<span class="st"> </span>type +<span class="st"> </span>women, <span class="dt">data =</span> Prestige)
-regsubsMod</code></pre></div>
+<pre class="r"><code># install.packages(&#39;leaps&#39;)
+require(leaps)</code></pre>
+<pre><code>## Loading required package: leaps</code></pre>
+<pre><code>## Warning: package &#39;leaps&#39; was built under R version 3.4.3</code></pre>
+<pre class="r"><code>regsubsMod = regsubsets(prestige ~ education + income + type + women, data = Prestige)
+regsubsMod</code></pre>
 <pre><code>## Subset selection object
 ## Call: regsubsets.formula(prestige ~ education + income + type + women, 
 ##     data = Prestige)
@@ -690,24 +669,24 @@ regsubsMod</code></pre></div>
 ## women         FALSE      FALSE
 ## 1 subsets of each size up to 5
 ## Selection Algorithm: exhaustive</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(regsubsMod, <span class="dt">scale =</span> <span class="st">&quot;bic&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-73-1.png" /><!-- --></p>
+<pre class="r"><code>plot(regsubsMod, scale = &quot;bic&quot;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-30-1.png" /><!-- --></p>
 <p>How to interpret this chart? We have set the scale to be the BIC metric, and the models will be built to be compared against this. Each rows of the chart represents 1 model, therefore, given the dataset that we use, we see 5 rows. If a model contains a specific variable on the x axis, the row is coloured in black. As we mentioned earlier about BIC, the lower the BIC, the better. In our case, the best model has a BIC of -160 and contains education, income and type == prof.</p>
 <p>This is a great opportunity to analyse all interactions by using the asterisk instead of the plus symbol. In this case, the best model giving the highest adjusted r-squared is represented by the one using income, education, typeof == prof, income x typeof == prof, income x typeof == wc, education x income x typeof == prof, education x income x women, education x income x typeof == prof x women.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">regsubsMod2 =<span class="st"> </span><span class="kw">regsubsets</span>(prestige ~<span class="st"> </span>education *<span class="st"> </span>income *<span class="st"> </span>type *<span class="st"> </span>women, <span class="dt">data =</span> Prestige)
-<span class="kw">plot</span>(regsubsMod2, <span class="dt">scale =</span> <span class="st">&quot;adjr2&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-74-1.png" /><!-- --></p>
+<pre class="r"><code>regsubsMod2 = regsubsets(prestige ~ education * income * type * women, data = Prestige)
+plot(regsubsMod2, scale = &quot;adjr2&quot;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-31-1.png" /><!-- --></p>
 <p>Let’s build that model to check what it looks like. Clearly the model has incredibly improved from the 0.79 adjusted r-squared to the 0.89 showed in the graph above and the summary below.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lmmod_3 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class="st"> </span>income +<span class="st"> </span>
-<span class="st">                                    </span>education +
-<span class="st">                                    </span><span class="kw">ifelse</span>(type ==<span class="st"> &#39;prof&#39;</span>,<span class="dv">1</span>,<span class="dv">0</span>) +
-<span class="st">                                    </span><span class="kw">I</span>(income *<span class="st"> </span><span class="kw">ifelse</span>(type ==<span class="st"> &#39;prof&#39;</span>,<span class="dv">1</span>,<span class="dv">0</span>)) +
-<span class="st">                                    </span><span class="kw">I</span>(income *<span class="st"> </span><span class="kw">ifelse</span>(type ==<span class="st"> &#39;prof&#39;</span>,<span class="dv">1</span>,<span class="dv">0</span>)) +<span class="st"> </span>
-<span class="st">                                    </span><span class="kw">I</span>(education *<span class="st"> </span>income *<span class="st"> </span><span class="kw">ifelse</span>(type ==<span class="st"> &#39;prof&#39;</span>,<span class="dv">1</span>,<span class="dv">0</span>)) +
-<span class="st">                                    </span><span class="kw">I</span>(education *<span class="st"> </span>income *<span class="st"> </span>women) +
-<span class="st">                                    </span><span class="kw">I</span>(education *<span class="st"> </span>income *<span class="st"> </span><span class="kw">ifelse</span>(type ==<span class="st"> &#39;prof&#39;</span>,<span class="dv">1</span>,<span class="dv">0</span>) *<span class="st"> </span>women)
-                         , <span class="dt">data =</span> Prestige)
-<span class="kw">summary</span>(lmmod_3)</code></pre></div>
+<pre class="r"><code>lmmod_3 = lm(prestige ~ income + 
+                                    education +
+                                    ifelse(type == &#39;prof&#39;,1,0) +
+                                    I(income * ifelse(type == &#39;prof&#39;,1,0)) +
+                                    I(income * ifelse(type == &#39;prof&#39;,1,0)) + 
+                                    I(education * income * ifelse(type == &#39;prof&#39;,1,0)) +
+                                    I(education * income * women) +
+                                    I(education * income * ifelse(type == &#39;prof&#39;,1,0) * women)
+                         , data = Prestige)
+summary(lmmod_3)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = prestige ~ income + education + ifelse(type == &quot;prof&quot;, 
@@ -721,21 +700,21 @@ regsubsMod</code></pre></div>
 ## -14.7716  -3.0627   0.8038   3.6038  13.0249 
 ## 
 ## Coefficients:
-##                                                                Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                                                   3.567e+00  4.415e+00   0.808  0.42132    
-## income                                                        4.129e-03  4.879e-04   8.463 4.50e-13 ***
-## education                                                     8.130e-01  6.276e-01   1.295  0.19852    
-## ifelse(type == &quot;prof&quot;, 1, 0)                                  4.773e+01  6.414e+00   7.442 5.66e-11 ***
-## I(income * ifelse(type == &quot;prof&quot;, 1, 0))                     -6.315e-03  1.331e-03  -4.746 7.78e-06 ***
-## I(education * income * ifelse(type == &quot;prof&quot;, 1, 0))          1.961e-04  7.410e-05   2.647  0.00959 ** 
-## I(education * income * women)                                 4.199e-06  9.086e-07   4.622 1.27e-05 ***
-## I(education * income * ifelse(type == &quot;prof&quot;, 1, 0) * women) -4.711e-06  1.025e-06  -4.595 1.40e-05 ***
+##                                                                   Estimate    Std. Error t value         Pr(&gt;|t|)    
+## (Intercept)                                                   3.5666107608  4.4150541220   0.808          0.42132    
+## income                                                        0.0041292267  0.0004879164   8.463 0.00000000000045 ***
+## education                                                     0.8129965651  0.6276364549   1.295          0.19852    
+## ifelse(type == &quot;prof&quot;, 1, 0)                                 47.7339583077  6.4138305857   7.442 0.00000000005661 ***
+## I(income * ifelse(type == &quot;prof&quot;, 1, 0))                     -0.0063145843  0.0013305678  -4.746 0.00000777834644 ***
+## I(education * income * ifelse(type == &quot;prof&quot;, 1, 0))          0.0001961407  0.0000741047   2.647          0.00959 ** 
+## I(education * income * women)                                 0.0000041994  0.0000009086   4.622 0.00001265802460 ***
+## I(education * income * ifelse(type == &quot;prof&quot;, 1, 0) * women) -0.0000047108  0.0000010252  -4.595 0.00001404005195 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 5.885 on 90 degrees of freedom
 ## Multiple R-squared:   0.89,  Adjusted R-squared:  0.8815 
-## F-statistic: 104.1 on 7 and 90 DF,  p-value: &lt; 2.2e-16</code></pre>
+## F-statistic: 104.1 on 7 and 90 DF,  p-value: &lt; 0.00000000000000022</code></pre>
 </div>
 <div id="stepwise-regression" class="section level2">
 <h2><span class="header-section-number">4.2</span> Stepwise regression</h2>
@@ -745,17 +724,17 @@ regsubsMod</code></pre></div>
 <li>Then we use the step function specifying the base model, scope and direction.</li>
 <li>The model with the least AIC is shown at the end.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">training1 =<span class="st"> </span><span class="kw">na.omit</span>(training)
+<pre class="r"><code>training1 = na.omit(training)
 
-base.mod =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class="st"> </span><span class="dv">1</span>, <span class="dt">data =</span> training1)
-all.mod =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class="st"> </span>., <span class="dt">data =</span> training1)
+base.mod = lm(prestige ~ 1, data = training1)
+all.mod = lm(prestige ~ ., data = training1)
 
 
 
-stepMod =<span class="st"> </span><span class="kw">step</span>(base.mod
-               , <span class="dt">scope =</span> <span class="kw">list</span>(<span class="dt">lower =</span> base.mod, <span class="dt">upper =</span> all.mod)
-               , <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>
-               , <span class="dt">trace =</span> <span class="dv">1</span>, <span class="dt">steps =</span> <span class="dv">1000</span>)</code></pre></div>
+stepMod = step(base.mod
+               , scope = list(lower = base.mod, upper = all.mod)
+               , direction = &quot;both&quot;
+               , trace = 1, steps = 1000)</code></pre>
 <pre><code>## Start:  AIC=382.18
 ## prestige ~ 1
 ## 
@@ -799,7 +778,7 @@ stepMod =<span class="st"> </span><span class="kw">step</span>(base.mod
 ## - income     1    508.42 3489.9 275.79
 ## - type       2    676.37 3657.9 276.99
 ## - education  1   1051.28 4032.8 285.62</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stepMod</code></pre></div>
+<pre class="r"><code>stepMod</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = prestige ~ education + type + income, data = training1)
@@ -812,24 +791,25 @@ stepMod =<span class="st"> </span><span class="kw">step</span>(base.mod
 <h2><span class="header-section-number">4.3</span> Comparing models using ANOVA</h2>
 <p>ANOVA lets you check if one model is a sufficient fit compared to a superset model. You have to make sure that the models passed to ANOVA are nested, that is, the predictors in one model is a subset of the next one.</p>
 <p>ANOVA checks if the model is significant compared to the previous one. As an example, here model 2 is massively significant compared to the first one. The 3rd model is has still got a significant effect compared to the second model, which basically shows that model 4 is not interesting meaning that the <em>women</em> variable is not needed in the model.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod1 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class="st"> </span>education, <span class="dt">data =</span> training1)
-mod2 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class="st"> </span>education +<span class="st"> </span>income, <span class="dt">data =</span> training1)
-mod3 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class="st"> </span>education +<span class="st"> </span>income +<span class="st"> </span>type, <span class="dt">data =</span> training1)
-mod4 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class="st"> </span>education +<span class="st"> </span>income +<span class="st"> </span>type +<span class="st"> </span>women, <span class="dt">data =</span> training1)
-<span class="kw">anova</span>(mod1,mod2,mod3,mod4)</code></pre></div>
+<pre class="r"><code>mod1 = lm(prestige ~ education, data = training1)
+mod2 = lm(prestige ~ education + income, data = training1)
+mod3 = lm(prestige ~ education + income + type, data = training1)
+mod4 = lm(prestige ~ education + income + type + women, data = training1)
+anova(mod1,mod2,mod3,mod4)</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Model 1: prestige ~ education
 ## Model 2: prestige ~ education + income
 ## Model 3: prestige ~ education + income + type
 ## Model 4: prestige ~ education + income + type + women
-##   Res.Df    RSS Df Sum of Sq       F    Pr(&gt;F)    
-## 1     66 4796.6                                   
-## 2     65 3657.9  1   1138.70 23.6838 8.151e-06 ***
-## 3     63 2981.5  2    676.37  7.0339  0.001766 ** 
-## 4     62 2980.9  1      0.59  0.0122  0.912283    
+##   Res.Df    RSS Df Sum of Sq       F      Pr(&gt;F)    
+## 1     66 4796.6                                     
+## 2     65 3657.9  1   1138.70 23.6838 0.000008151 ***
+## 3     63 2981.5  2    676.37  7.0339    0.001766 ** 
+## 4     62 2980.9  1      0.59  0.0122    0.912283    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><br></p>
 </div>
 </div>
 <div id="checking-over-fitting-and-cross-validation" class="section level1">
@@ -846,13 +826,13 @@ mod4 =<span class="st"> </span><span class="kw">lm</span>(prestige ~<span class=
 <div id="how-to-implement-it-in-r" class="section level2">
 <h2><span class="header-section-number">5.2</span> How to implement it in R</h2>
 <p>The <strong>cv.glm()</strong> function in the <strong>boot()</strong> package can implement the coupled cross-validation. In order to use this, we ned to build the linear model using the <strong>glm()</strong> function instead of the <strong>lm()</strong> function, and then apply the <strong>cv.glm()</strong>. The <em>$delta</em> parameter in cv.glm() provides the MSE and adjusted MSE across the k-Folds of cross validation.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#</span>
-<span class="kw">require</span>(boot)
+<pre class="r"><code>#
+require(boot)
 
-Prestige =<span class="st"> </span><span class="kw">na.omit</span>(Prestige)
+Prestige = na.omit(Prestige)
 
-glmmod =<span class="st"> </span><span class="kw">glm</span>(prestige ~<span class="st"> </span>income +<span class="st"> </span>education +<span class="st"> </span>type, <span class="dt">data =</span> Prestige)
-<span class="kw">cv.glm</span>(Prestige, glmmod, <span class="dt">K=</span><span class="dv">5</span>)</code></pre></div>
+glmmod = glm(prestige ~ income + education + type, data = Prestige)
+cv.glm(Prestige, glmmod, K=5)</code></pre>
 <pre><code>## $call
 ## cv.glm(data = Prestige, glmfit = glmmod, K = 5)
 ## 
@@ -895,6 +875,7 @@ glmmod =<span class="st"> </span><span class="kw">glm</span>(prestige ~<span cla
 ## [581]  1308630016  1218387550  -967409365  1887691309  -316054886   -63758760  -266788415   185708147  -759780460  1340842530 -2071614153  2022984705     2552070   740529476  1857042549 -1371825697   -11229896  1090795286 -1229441245 -1129036571
 ## [601]  1839988994 -1536167056  1936583449  -906851573  1096800252  -469552086 -1816766369    26775529   908620030   372875500   231326781  1742551047  -624475152  1366232974   373001659   910388125  -755175094 -1965516440  -688058543  -961573821
 ## [621]  -974564028   313325042  -595853369  1142669713  1590129942   227162105</code></pre>
+<p><br></p>
 </div>
 </div>
 <div id="non-linear-models-with-splines-and-gam" class="section level1">
@@ -908,11 +889,11 @@ glmmod =<span class="st"> </span><span class="kw">glm</span>(prestige ~<span cla
 <div id="smoothing-curves-with-smooth.spline" class="section level2">
 <h2><span class="header-section-number">6.1</span> Smoothing curves with smooth.spline()</h2>
 <p>Smoothing splines is a great way to capture non linear relationships between the y and the x variable. Let’s work this with an example. The relationship between prestige and income is linear to a certain point but flattens after certain level.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="dt">x =</span> training$income, <span class="dt">y =</span> training$prestige)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-79-1.png" /><!-- --></p>
+<pre class="r"><code>plot(x = training$income, y = training$prestige)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-36-1.png" /><!-- --></p>
 <p>Let’s model the smoothing splines for various degrees of freedom. The <em>df</em> argument in the <em>smooth.spline()</em> function sets the degree of freedom, and then <em>cv = T</em>, does a cross-validation to find the optimal degrees of freedom. The sp_cv seems to say that the optimal number of degrees of freedonm is 4, let’s check that with some plots. As you can see, the more degrees of freedom you allow, the more curvature and overfitty the models get.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sp_cv =<span class="st"> </span><span class="kw">smooth.spline</span>(<span class="dt">x =</span> training$income, <span class="dt">y =</span> training$prestige, <span class="dt">cv =</span>T)
-sp_cv</code></pre></div>
+<pre class="r"><code>sp_cv = smooth.spline(x = training$income, y = training$prestige, cv =T)
+sp_cv</code></pre>
 <pre><code>## Call:
 ## smooth.spline(x = training$income, y = training$prestige, cv = T)
 ## 
@@ -920,32 +901,43 @@ sp_cv</code></pre></div>
 ## Equivalent Degrees of Freedom (Df): 4.039708
 ## Penalized Criterion (RSS): 8765.979
 ## PRESS(l.o.o. CV): 854.1636</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sp2 =<span class="st"> </span><span class="kw">smooth.spline</span>(<span class="dt">x =</span> training$income, <span class="dt">y =</span> training$prestige, <span class="dt">df =</span> <span class="dv">2</span>)
-sp4 =<span class="st"> </span><span class="kw">smooth.spline</span>(<span class="dt">x =</span> training$income, <span class="dt">y =</span> training$prestige, <span class="dt">df =</span> <span class="dv">4</span>)
-sp10 =<span class="st"> </span><span class="kw">smooth.spline</span>(<span class="dt">x =</span> training$income, <span class="dt">y =</span> training$prestige, <span class="dt">df =</span> <span class="dv">10</span>)
-sp20 =<span class="st"> </span><span class="kw">smooth.spline</span>(<span class="dt">x =</span> training$income, <span class="dt">y =</span> training$prestige, <span class="dt">df =</span> <span class="dv">20</span>)
-sp50 =<span class="st"> </span><span class="kw">smooth.spline</span>(<span class="dt">x =</span> training$income, <span class="dt">y =</span> training$prestige, <span class="dt">df =</span> <span class="dv">50</span>)
+<pre class="r"><code>sp2 = smooth.spline(x = training$income, y = training$prestige, df = 2)
+sp4 = smooth.spline(x = training$income, y = training$prestige, df = 4)
+sp10 = smooth.spline(x = training$income, y = training$prestige, df = 10)
+sp20 = smooth.spline(x = training$income, y = training$prestige, df = 20)
+sp50 = smooth.spline(x = training$income, y = training$prestige, df = 50)
 
-<span class="kw">plot</span>(<span class="dt">x =</span> Prestige$income, <span class="dt">y =</span> Prestige$prestige, <span class="dt">main =</span> <span class="st">&quot;Income vs Prestige&quot;</span>)
-<span class="kw">lines</span>(sp2, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)
-<span class="kw">lines</span>(sp4, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)
-<span class="kw">lines</span>(sp10, <span class="dt">col =</span> <span class="st">&quot;green&quot;</span>)
-<span class="kw">lines</span>(sp20, <span class="dt">col =</span> <span class="st">&quot;orange&quot;</span>)
-<span class="kw">lines</span>(sp50, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-80-1.png" /><!-- --></p>
+plot(x = Prestige$income, y = Prestige$prestige, main = &quot;Income vs Prestige&quot;)
+lines(sp2, col = &quot;blue&quot;)
+lines(sp4, col = &quot;red&quot;, lwd = 2)
+lines(sp10, col = &quot;green&quot;)
+lines(sp20, col = &quot;orange&quot;)
+lines(sp50, col = &quot;black&quot;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-37-1.png" /><!-- --></p>
 <p>Now, that we have checked that a model with 4 degrees of freedom using splines seems to be the most optimal, let’s use it to predict test data. We can see that we have a mean squared error of 118 and a rmse of 10.88 (when Prestige has a range of ~60) so that is not that bad considering that only 1 predictor was used.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&#39;DMwR&#39;)</span>
-<span class="kw">require</span>(DMwR)
-predicted =<span class="st"> </span><span class="kw">predict</span>(sp_cv, test$income)$y
-DMwR::<span class="kw">regr.eval</span>(test$prestige, predicted)</code></pre></div>
+<pre class="r"><code># install.packages(&#39;DMwR&#39;)
+require(DMwR)</code></pre>
+<pre><code>## Loading required package: DMwR</code></pre>
+<pre><code>## Warning: package &#39;DMwR&#39; was built under R version 3.4.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;DMwR&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:broom&#39;:
+## 
+##     bootstrap</code></pre>
+<pre><code>## The following object is masked from &#39;package:plyr&#39;:
+## 
+##     join</code></pre>
+<pre class="r"><code>predicted = predict(sp_cv, test$income)$y
+DMwR::regr.eval(test$prestige, predicted)</code></pre>
 <pre><code>##         mae         mse        rmse        mape 
 ##   8.8769458 118.4485612  10.8834076   0.2088256</code></pre>
 </div>
 <div id="splines-and-gams-generalized-additive-models" class="section level2">
 <h2><span class="header-section-number">6.2</span> Splines and GAMs (generalized additive models)</h2>
 <p>The <strong>splines()</strong> package provides a couple of useful ways to produce new variables that could be used as exploratory variables in GAMs or linear models. For example the natural splines (<strong>ns()</strong> function) with 3 degrees of freedom gives 3 columns, which we can use to build generalized additive models.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(splines)
-<span class="kw">head</span>(<span class="kw">ns</span>(Prestige$income, <span class="dt">df =</span> <span class="dv">3</span>))</code></pre></div>
+<pre class="r"><code>require(splines)</code></pre>
+<pre><code>## Loading required package: splines</code></pre>
+<pre class="r"><code>head(ns(Prestige$income, df = 3))</code></pre>
 <pre><code>##               1         2          3
 ## [1,]  0.3993951 0.4373723 -0.1004036
 ## [2,] -0.1655583 0.3563004  0.8092579
@@ -954,8 +946,8 @@ DMwR::<span class="kw">regr.eval</span>(test$prestige, predicted)</code></pre></
 ## [5,]  0.1447406 0.5728679 -0.2859775
 ## [6,]  0.3453951 0.4743901 -0.1684402</code></pre>
 <p>GAMs allow us to model the Y variable as an additive combination of non-linear functions of x, so that basically, instead of x we can use nonlinear functions of x. It is called additive because it calculates functions for each x and adds up their contributions. LEt’s use the <strong>MGCV</strong> package for this. We have an much better performance if you look at the results.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gamMod =<span class="st"> </span>mgcv::<span class="kw">gam</span>(prestige ~<span class="st"> </span><span class="kw">ns</span>(income,<span class="dv">3</span>) +<span class="st"> </span><span class="kw">ns</span>(education,<span class="dv">4</span>) +<span class="st"> </span>type, <span class="dt">data =</span> training)
-gamMod</code></pre></div>
+<pre class="r"><code>gamMod = mgcv::gam(prestige ~ ns(income,3) + ns(education,4) + type, data = training)
+gamMod</code></pre>
 <pre><code>## 
 ## Family: gaussian 
 ## Link function: identity 
@@ -965,9 +957,9 @@ gamMod</code></pre></div>
 ## Total model degrees of freedom 10 
 ## 
 ## GCV score: 52.34257</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">predicted =<span class="st"> </span><span class="kw">predict</span>(gamMod, test)
+<pre class="r"><code>predicted = predict(gamMod, test)
 
-DMwR::<span class="kw">regr.eval</span>(test$prestige, predicted)</code></pre></div>
+DMwR::regr.eval(test$prestige, predicted)</code></pre>
 <pre><code>##        mae        mse       rmse       mape 
 ##  5.6301073 50.4088997  7.0999225  0.1408808</code></pre>
 </div>

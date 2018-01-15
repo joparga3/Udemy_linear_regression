@@ -1,0 +1,497 @@
+---
+title: "Regression modelling"
+author: "Jose Parreno Garcia"
+date: "November 2017"
+output: 
+  html_document:
+    toc: true # table of content true
+    depth: 6  # upto three depths of headings (specified by #, ##, ###, ####)
+    number_sections: true  ## if you want number sections at each table header
+    # theme: spacelab  # many options for theme, this one is my favorite.
+    # highlight: tango  # specifies the syntax highlighting style
+    keep_md: true
+---
+<style>
+body {
+text-align: justify}
+</style>
+
+<br>
+
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width = 250)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source_path = getwd()
+```
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(knitr)
+```
+
+In the previous section we learnt a bit of the preparatory steps needed before building predictive models. In this section we will learn about:
+
+* Introduction to linear regression
+* Interpreting results and interaction analysis
+* Residual Analysis
+* Improving models using best subsets, stepwise, and comparing models with ANOVA
+* Checking over fitting and cross validation
+* Non-linear models with splines and GAM
+
+<br>
+
+# Introduction to linear regression
+
+Linear regression is a widely accepted technique when building models for business because it is an easy technique to explain results and impacts of certain variables.
+
+## Type of variables
+
+From a predictive modelling perspective the variables are of 2 types: dependent and independent.
+
+```{r echo=FALSE, fig.width=3, fig.height=3}
+include_graphics(paste0(source_path,"/images/1.PNG"))
+```
+
+## The purpose and concept behind linear regression
+
+Linear regression is used when your *y* variable is continuous. 
+
+```{r echo=FALSE, fig.width=3, fig.height=3}
+include_graphics(paste0(source_path,"/images/2.PNG"))
+```
+
+## Creating training and testing samples
+
+We split the data into training and testing. The training data is the one we use to train the model, then we use the model created to use the test data to check our predictions. 
+
+```{r fig.width=3, fig.height=3}
+## LOADING THE DATA FROM THE PACKAGE
+# install.packages('car')
+require(car)
+data(Prestige, package = 'car')
+Prestige = na.omit(Prestige)
+
+# In order to separate training and testing set, the first thing we need to do is set a seed. This is done to make sure that the randomiser starts always at the same point.
+set.seed(100)
+
+# There are multiple ways of separating a dataset. This uses the sample() function as a method. 70% to the train data and 30% to the test.
+train_rows = sample(1:nrow(Prestige), size = 0.7*nrow(Prestige))
+training = Prestige[train_rows,]
+test = Prestige[-train_rows,]
+```
+
+## How to build linear regression models in R
+
+Let's build a first linear model
+
+```{r fig.width=3, fig.height=3}
+# For now we have selected a couple of random variables for the first model
+
+lmmod = lm(prestige ~ income + education, data = training)
+lmmod
+```
+
+This can be interpreted as
+
+```{r echo=FALSE, fig.width=3, fig.height=3}
+include_graphics(paste0(source_path,"/images/3.PNG"))
+```
+
+The model we have builts contains an incredible amount of information, you can check it by typing names(lmmod)
+
+```{r fig.width=3, fig.height=3}
+names(lmmod)
+```
+
+The most easy way to check the model is by using summary(). We will learn how to interpret the summary() output in the next section.
+
+```{r fig.width=3, fig.height=3}
+summary(lmmod)
+```
+
+## Tyding up results using the broom package
+
+```{r fig.width=3, fig.height=3}
+# install.packages('broom')
+require(broom)
+
+# Use the tidy() function from the broom package
+lmmod_df = tidy(lmmod)
+lmmod_df
+```
+
+## How to predict on new data
+
+```{r fig.width=3, fig.height=3}
+# To predict use the predict() function
+require(broom)
+
+predicted = predict(lmmod, newdata = test)
+predicted
+```
+
+## Evaluating regression models
+
+Let's compute the accuracy by computing the mean square error (MSE) and the mean absolute percentage error (MAPE). The lower the error the better.
+
+```{r fig.width=3, fig.height=3}
+# MSE
+mean((test$prestige - predicted)^2)
+
+# MAPE
+mean(abs(test$prestige - predicted)/test$prestige)
+```
+
+<br>
+
+# Interpreting results and interaction analysis
+
+In the previous section we learnt how to built a predictive model with only the given variables. However, there might be cases where interactions between variables might be massively valuable. In this section we will learn:
+
+* How to interpret the summary of the lm model
+* How to create interaction terms between variables within regression models.
+
+## Interpret results
+
+Let's re-run the summary of the linear model and start de-coding everthing it shows.
+
+```{r fig.width=3, fig.height=3}
+summary(lmmod)
+```
+
+Starting with the coefficients section:
+
+* The $\beta$ values are found in the **Estimate** column.
+* The **Std. Error** represents the standard error.
+* **t-value** represents the $\beta$ estimate / **Std. Error**
+* Finally, based on this **t-value**, the **p-values** (**Pr>|t|**) are derived.
+
+Remember from statistics, that p-values are statistical tests, where we have an initial hypothesis (null hypothesis) and then an alternative hypothesis. The idea is to calculate p-values to determine if we reject or accept the initial hypothesis. As an example, in this case, our null hypothesis would be that there is no relationship between the input independent variable X and the dependent variable Y. In the example above, you can see how significant is each independent variable compared with Y (prestige) variable. Significance levels can vary, but common main practice is that a significance level below 5% is acceptable. This would be represented by the '*'. Aynthing with a star to 3 stars, is a significant variable, which means that we reject the null hypothesis (no relatioship between X and Y) and say there is some kind of relationship between X and Y.
+
+```{r echo=FALSE, fig.width=3, fig.height=3}
+include_graphics(paste0(source_path,"/images/4.PNG"))
+```
+
+```{r echo=FALSE, fig.width=3, fig.height=3}
+include_graphics(paste0(source_path,"/images/5.PNG"))
+```
+
+```{r echo=FALSE, fig.width=3, fig.height=3}
+include_graphics(paste0(source_path,"/images/6.PNG"))
+```
+
+Moving on to the 'metrics' section:
+
+* The **Multiple R-squared** value is the percentage of variation of Y (prestige variable) explained by the model. In general terms, the higher the R-squared the better. * But there is a caveat: as you add more variables to the model, your R-squared will increase, so when you are comparing models, multiple r-squared shouldnt be used as a metric.
+* The better way of comparing models is using the **Adjusted R-squared**, because it penalises it penalises the increase in number of predictors.
+* A couple of other metrics that are not present in the summary are the **AIC()** (Akaike information criterion) and the **BIC()** (Bayesian information criterion) metric. They are basically penalized-likelihood criteria. The lower the AIC and BIC, the better your model. You can check this in R by using the **AIC()** and **BIC()** function.
+
+```{r fig.width=3, fig.height=3}
+AIC(lmmod)
+BIC(lmmod)
+```
+
+If we have introduced the idea that having simpler models is better by saying that a way to compare different models should be done by checking the adjusted r-squared and not the multiple r-squared, that means there variables that, when added, don't add a huge amount of explanation of the Y behaviour. One of the possible reasons for this is multi-collinearity. As an example, you might a model with only 1 input variable, being that variable significant. However, by adding another input variable, the initial one that was significant, has become insignificant. How is that possible? Basically, that means that both variables kind of explain the same things, and there is no need of having both in the model. This can be checked using the **VIF** (variance inflation factor).
+
+```{r echo=FALSE, fig.width=3, fig.height=3}
+include_graphics(paste0(source_path,"/images/7.PNG"))
+```
+
+If a variable has high VIF, that means that the information provided by that variable can be explained by other variables in the model. As said above, the presence of a variable with high inflation can be redundant. Typically, a variable with VIF > 4, is said to have multi-collinearity.
+
+```{r fig.width=3, fig.height=3}
+car::vif(lmmod)
+```
+
+## Interaction terms
+
+Interaction terms are added when we think a look at 2 variables together rather than on its own might be useful. For example, in a medical insurance world, age and being a smoker will be useful to predict risk, but the combination of both might be even more predicted. In other words, maybe young smokers might be less risky than old smokers. Returning to the dataset we are working with, we might want to investigate the interaction between education and income. If you check the summary results, we can see that the interaction is significant and has improved the adjusted r-squared by 2%.
+
+```{r fig.width=3, fig.height=3}
+# The ':' represents product between income and education
+lmmod_1 = lm(prestige ~ income + education + income:education, data = training)
+summary(lmmod_1)
+```
+
+## Non-linear terms
+
+We could also specify non-linear terms by making use of the *I()* function in R. Let's say for example that we think there is a relationship of education to the power of 2 that can explain prestige better.
+
+```{r fig.width=3, fig.height=3}
+# By adding -1 we can force the model to eliminate the intercept to the created model.
+lmmod_1_1 = lm(prestige ~ income + I(education^2) - 1, data = training)
+summary(lmmod_1_1)
+```
+
+## Factor terms
+
+Finally, we can also include non-continuous variables, in other words, categorical variables to the model. Luckily for use, we don't need to tell the linear model that we are adding a categorical variable. We can simply add it, and it with create dummy variables (i.e., flafs for each category representing an ifelse scenario).
+
+```{r fig.width=3, fig.height=3}
+# Categorical variables will show all except 1 of the categories.
+lmmod_1_2 = lm(prestige ~ income + education + type, data = training)
+summary(lmmod_1_2)
+```
+
+## Fitted values and residuals
+
+The fitted values are the predicted by the model for the observations and the training data. It can be computed using:
+
+* the **fitted()** function in R.
+* the fitted.values category within the linear model 
+* the **predict()** function, which will use the model just created and apply it to the data you want it to be applied to.
+
+```{r fig.width=3, fig.height=3}
+## ONLY RUNNING ONE OF THE METHODS (in this case my preferred due to intuition)
+# fitted(lmmod)
+# lmmod$fitted.values
+predict(lmmod, newdata=training)
+```
+
+Residuals are the difference between the real values of the dataset and what your model predicts. You can check it here:
+
+```{r fig.width=3, fig.height=3}
+lmmod$residuals
+```
+
+<br>
+
+# Residual Analysis
+
+Given that the idea scenario would be to have all residuals being 0, we want to have a deeper understanding of what the errors look like and how to improve them. In this section we will focus on:
+
+* Residual analysis
+* And check extreme/influential values (outliers) with Cook's distance
+
+## Residual analysis plots
+
+```{r fig.width=10, fig.height=10}
+par(mfrow=c(2,2))
+plot(lmmod)
+```
+
+* **Residuals-vs-fitted.** Remember residuals are the errors and fitted values are the predicted values of the dataset. You can see a dotted line at y = 0, which is what we would like to ideally have the scatter plot points. What we would like is a random cloud of points which would lead to a mean (represented by the red line) falling on top of y = 0 (the dotted line). We don't want the red line to increase or decrease due to the values of the fitted values. If it does we are talking about heteroscasdicity and don't want it to happen or need to address it if we are to obtain good results with the test data. To check this, instead of relying on a visual look at the graph (is the red line massively above dotted line?), we can use a statistical test for it. As always with a statistical test, we have a null and alternative hypothesis. The null hypothesis will be that there is heteroscasdicity and the alternative that there isn't. The test we will perform is the *studentized Breusch-Pagan* using the **bptest()** function from the **lmtest** package. In this case, the results show that the p-value is greater than the significance level of 0.05, we can't reject the null hypothesis that the error is constant and there we can't say there is heteroscasdicity.
+
+```{r fig.width=10, fig.height=10}
+# install.packages('lmtest')
+require(lmtest)
+lmtest::bptest(lmmod)
+```
+
+* **Normal Q-Q**. The idea is to check that the residuals follow a normal distribution. Ideally, the points should fall in the diagonal dotted line.  
+
+* **Residuals vs Leverage**. Leverage is how much each data point influences the regression. The plot also contours values (you can see a dotted red line with the value of Cook's distance).
+
+## Cook's distance.
+
+Cook's distance shows how much the fitted values would change if an observation was removed. Generally, points that are 4 times bigger than the mean are considered influential. Checking this with diagnostic plots:
+
+```{r fig.width=10, fig.height=10}
+cooks.distance(lmmod)
+```
+
+```{r fig.width=10, fig.height=10}
+car::influenceIndexPlot(lmmod, id.n = 5)
+```
+
+## Going back to the Residua vs Fitted plot
+
+Given that this is one of the plots I really like to check, it is worth mentioning that the plot you see above is a plot showing is the general information about the model. If you want to see the contribution of each variable you can use the **residualPlots()** function from the **cars** package. 
+
+```{r fig.width=10, fig.height=10}
+car::residualPlots(lmmod)
+```
+
+If you check the results, we clearly see a significant curvature in *income* compared to *education*. This is the typical example where we would seek to transform the variable. The new model shows that the transformation of the income variable is not flat for the Residuals vs Fitted and the adjusted-rsquared has improved 3%.
+
+```{r fig.width=10, fig.height=10}
+lmmod_2 = lm(prestige ~ log(income) + education, data = training)
+summary(lmmod_2)
+car::residualPlots(lmmod_2)
+```
+
+<br>
+
+# Improving models using best subsets, stepwise, and comparing models with ANOVA
+
+Until now we have learnt how to build a regression model and how to check the basic performance of that model, but we haven't yet looked at building multiple models that might increase performance and how to build them. In this section we will use:
+
+* Best subsets regression
+* Stepwise regression
+* Comparing models using ANOVA
+
+## Best subsets regression
+
+Best subsets technique chooses the best model for each size based on-predetermined metrics such as adjusted r-squared, BIC, etc. A way to perform best subsets is to use the **regsubsets()** function from the **leaps** package.
+
+```{r fig.width=7, fig.height=7}
+# install.packages('leaps')
+require(leaps)
+
+regsubsMod = regsubsets(prestige ~ education + income + type + women, data = Prestige)
+regsubsMod
+
+plot(regsubsMod, scale = "bic")
+```
+
+How to interpret this chart? We have set the scale to be the BIC metric, and the models will be built to be compared against this. Each rows of the chart represents 1 model, therefore, given the dataset that we use, we see 5 rows. If a model contains a specific variable on the x axis, the row is coloured in black. As we mentioned earlier about BIC, the lower the BIC, the better. In our case, the best model has a BIC of -160 and contains education, income and type == prof. 
+
+This is a great opportunity to analyse all interactions by using the asterisk instead of the plus symbol. In this case, the best model giving the highest adjusted r-squared is represented by the one using income, education, typeof == prof, income x typeof == prof, income x typeof == wc, education x income x typeof == prof, education x income x women, education x income x typeof == prof x women. 
+
+```{r fig.width=10, fig.height=7}
+regsubsMod2 = regsubsets(prestige ~ education * income * type * women, data = Prestige)
+plot(regsubsMod2, scale = "adjr2")
+```
+
+Let's build that model to check what it looks like. Clearly the model has incredibly improved from the 0.79 adjusted r-squared to the 0.89 showed in the graph above and the summary below.
+
+```{r fig.width=7, fig.height=7}
+lmmod_3 = lm(prestige ~ income + 
+                                    education +
+                                    ifelse(type == 'prof',1,0) +
+                                    I(income * ifelse(type == 'prof',1,0)) +
+                                    I(income * ifelse(type == 'prof',1,0)) + 
+                                    I(education * income * ifelse(type == 'prof',1,0)) +
+                                    I(education * income * women) +
+                                    I(education * income * ifelse(type == 'prof',1,0) * women)
+                         , data = Prestige)
+summary(lmmod_3)
+```
+
+## Stepwise regression
+
+Another method for searching better models is stepwise regression. Stepwise regression can be of 2 kinds, adding or removing variables one by one. My personal approach has always been towards the removal of variables. Stepwise then uses a defined metric to decide is the model is better or worse than it was with and without that variable (as an example we will use AIC criterion in this case). Unlike best subsets regression, it returns only one best model with the lowest AIC.  To run a step wise model in both directions we need to:
+
+* First define a base model that doesn't include variables, and then one which includes all of them.
+* Then we use the step function specifying the base model, scope and direction.
+* The model with the least AIC is shown at the end.
+
+```{r fig.width=7, fig.height=7}
+training1 = na.omit(training)
+
+base.mod = lm(prestige ~ 1, data = training1)
+all.mod = lm(prestige ~ ., data = training1)
+
+
+
+stepMod = step(base.mod
+               , scope = list(lower = base.mod, upper = all.mod)
+               , direction = "both"
+               , trace = 1, steps = 1000)
+
+stepMod
+```
+
+## Comparing models using ANOVA
+
+ANOVA lets you check if one model is a sufficient fit compared to a superset model. You have to make sure that the models passed to ANOVA are nested, that is, the predictors in one model is a subset of the next one.
+
+ANOVA checks if the model is significant compared to the previous one. As an example, here model 2 is massively significant compared to the first one. The 3rd model is has still got a significant effect compared to the second model, which basically shows that model 4 is not interesting meaning that the *women* variable is not needed in the model. 
+
+```{r fig.width=7, fig.height=7}
+mod1 = lm(prestige ~ education, data = training1)
+mod2 = lm(prestige ~ education + income, data = training1)
+mod3 = lm(prestige ~ education + income + type, data = training1)
+mod4 = lm(prestige ~ education + income + type + women, data = training1)
+anova(mod1,mod2,mod3,mod4)
+```
+
+<br>
+
+# Checking over fitting and cross validation
+
+In the previous section we learnt some interesting techniques to select the best model. The next step is to cross validate the model rigorously to see how accurately it will perform in practice. The K-fold cross validation is a convenient way to test this. In this section we will learn:
+
+* How k-Fold cross validation works
+* How to implement it in R
+
+## How k-Fold cross validation works
+
+Cross validation is the process of building a model on a dataset and then testing it on a different sample. The k-Fold cross validation performs the validation process *k* times by splittting the data into *k* samples. For example. if *k=5*, then we would build the model on four samples of the data, and then test on the fifth unused sample. Then we would change the unused sample data, including the previous one in the training model, and repeat the process. At the end, when the *k* tests have been performed, the mean of the errors if finally reported. 
+
+## How to implement it in R
+
+The **cv.glm()** function in the **boot()** package can implement the coupled cross-validation. In order to use this, we ned to build the linear model using the **glm()** function instead of the **lm()** function, and then apply the **cv.glm()**. The *$delta* parameter in cv.glm() provides the MSE and adjusted MSE across the k-Folds of cross validation. 
+
+```{r fig.width=7, fig.height=7}
+#
+require(boot)
+
+Prestige = na.omit(Prestige)
+
+glmmod = glm(prestige ~ income + education + type, data = Prestige)
+cv.glm(Prestige, glmmod, K=5)
+
+```
+
+<br>
+
+# Non-linear models with splines and GAM
+
+So far we have been building models where the fit has always been a straight line. It is time we learn how to build non-linear models as well. In this section we will learn:
+
+* How to fit smoothing curves instead of lines of best fit using smooth.spline()
+* Then we learn how to create multiple variables from one variable in the form of natural cubic splines
+* And how to use it as exploratory varaibles in GAMs.
+
+## Smoothing curves with smooth.spline()
+
+Smoothing splines is a great way to capture non linear relationships between the y and the x variable. Let's work this with an example. The relationship between prestige and income is linear to a certain point but flattens after certain level.
+
+```{r fig.width=7, fig.height=7}
+plot(x = training$income, y = training$prestige)
+```
+
+Let's model the smoothing splines for various degrees of freedom. The *df* argument in the *smooth.spline()* function sets the degree of freedom, and then *cv = T*, does a cross-validation to find the optimal degrees of freedom. The sp_cv seems to say that the optimal number of degrees of freedonm is 4, let's check that with some plots. As you can see, the more degrees of freedom you allow, the more curvature and overfitty the models get.      
+
+```{r fig.width=7, fig.height=7}
+sp_cv = smooth.spline(x = training$income, y = training$prestige, cv =T)
+sp_cv
+
+sp2 = smooth.spline(x = training$income, y = training$prestige, df = 2)
+sp4 = smooth.spline(x = training$income, y = training$prestige, df = 4)
+sp10 = smooth.spline(x = training$income, y = training$prestige, df = 10)
+sp20 = smooth.spline(x = training$income, y = training$prestige, df = 20)
+sp50 = smooth.spline(x = training$income, y = training$prestige, df = 50)
+
+plot(x = Prestige$income, y = Prestige$prestige, main = "Income vs Prestige")
+lines(sp2, col = "blue")
+lines(sp4, col = "red", lwd = 2)
+lines(sp10, col = "green")
+lines(sp20, col = "orange")
+lines(sp50, col = "black")
+```
+
+Now, that we have checked that a model with 4 degrees of freedom using splines seems to be the most optimal, let's use it to predict test data. We can see that we have a mean squared error of 118 and a rmse of 10.88 (when Prestige has a range of ~60) so that is not that bad considering that only 1 predictor was used. 
+
+```{r fig.width=7, fig.height=7}
+# install.packages('DMwR')
+require(DMwR)
+predicted = predict(sp_cv, test$income)$y
+DMwR::regr.eval(test$prestige, predicted)
+```
+
+## Splines and GAMs (generalized additive models)
+
+The **splines()** package provides a couple of useful ways to produce new variables that could be used as exploratory variables in GAMs or linear models. For example the natural splines (**ns()** function) with 3 degrees of freedom gives 3 columns, which we can use to build generalized additive models. 
+
+```{r fig.width=7, fig.height=7}
+require(splines)
+head(ns(Prestige$income, df = 3))
+```
+
+GAMs allow us to model the Y variable as an additive combination of non-linear functions of x, so that basically, instead of x we can use nonlinear functions of x. It is called additive because it calculates functions for each x and adds up their contributions. LEt's use the **MGCV** package for this. We have an much better performance if you look at the results.
+
+```{r fig.width=7, fig.height=7}
+gamMod = mgcv::gam(prestige ~ ns(income,3) + ns(education,4) + type, data = training)
+gamMod
+
+predicted = predict(gamMod, test)
+
+DMwR::regr.eval(test$prestige, predicted)
+```
+
+
+
